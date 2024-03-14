@@ -1,14 +1,13 @@
 import assemblyai as aai
 from elevenlabs import generate, stream, play
 from openai import OpenAI
-from constants import assemblyai_api_key, elevenlabs_api_key, openai_api_key
+from constants import assemblyai_api_key, openai_api_key
 
 class AI_Assistant:
     def __init__(self):
         # Define API Keys
         aai.settings.api_key = assemblyai_api_key
         self.openai_client = OpenAI(api_key=openai_api_key)
-        self.elevenlabs_api_key = elevenlabs_api_key
 
         self.transcriber = None
 
