@@ -4,6 +4,5 @@ asyncio
 base64
 json
 pyaudio
-os
 pathlib
 openai
