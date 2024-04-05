@@ -6,8 +6,6 @@ import json
 import pyaudio
 from pathlib import Path
 from openai import OpenAI
-from streamlit_gsheets import GSheetsConnection
-from streamlit.components.v1 import html
 
 
 # Prompt
@@ -74,7 +72,7 @@ def stop_listening():
 	st.session_state['run'] = False
 
 def update_initial_image():
-	image_display.image('1.png')
+	image_display.image('questions/1.png')
 	
 
 def process_transcript(transcript):
@@ -84,7 +82,7 @@ def process_transcript(transcript):
 	#st.write(st.session_state['text'])
 	if st.session_state['current_question'] < 8:
 		st.session_state['current_question'] += 1
-		image_display.image(f'{st.session_state["current_question"]}.png')
+		image_display.image(f'/questions/{st.session_state["current_question"]}.png')
 	else:
 		st.session_state['run'] = False
 		print(st.session_state['responses'])
@@ -96,11 +94,9 @@ def process_transcript(transcript):
             model = "gpt-3.5-turbo",
             messages = full_transcript
         )
-		
 		ai_response = response.choices[0].message.content
 
-
-		image_display.image(f'fortune-{ai_response}.png')
+		image_display.image(f'/results/fortune-{ai_response}.png')
 		transcription_display.button('Get fortune by email', on_click=open_page('https://forms.gle/RvTLdKiU5GJkah7U8'))
 
 	
