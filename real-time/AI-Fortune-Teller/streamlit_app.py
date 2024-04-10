@@ -4,13 +4,13 @@ import asyncio
 import base64
 import json
 import pyaudio
-from pathlib import Path
 from openai import OpenAI
+import webbrowser
 
 
 # Prompt
 full_transcript = [
-	{"role":"system", "content":"""You are an AI Fortune-teller. I have asked 7 questions to a user and gotten answers for each question which I have numbered 1 to 7. Here are the 9 questions:Q1. You awaken on a train, you're gliding past rolling hills and tranquil lakes. Describe your initial feelings. What's the first thing you'd do?
+	{"role":"system", "content":"""You are an AI Fortune-teller. I have asked 7 questions to a user and gotten answers for each question which I have numbered 1 to 7. Here are the 7 questions:Q1. You awaken on a train, you're gliding past rolling hills and tranquil lakes. Describe your initial feelings. What's the first thing you'd do?
 2. As the train slows, you spy an ancient village nestled in the mountainside. Tell me what you feel compelled to explore. What draws your attention?
 3. On your way to the village, a hidden grove reveals a family of deer playing in the sunlight. What would you do?
 4. Next, you discover a trail leading to an enchanting cave. As you approach, you hear the faint melody of an unseen musician. What kind of music do you hear?
@@ -18,7 +18,7 @@ full_transcript = [
 6. As night envelops the village, you accept an invitation to a local celebration. The villagers share stories of their heritage and invite you to partake in a time-honored dance. Do you accept the invitation or do you move on in your journey?
 7. On the way back to the train, you come to a crossroads of two paths, one going left and one going right. Which one do you take instinctively?
   ------------------------------------------------------------------
-Based on their answers to the above questions, you need to decide their fortunes from these following 10 fortunes:
+Based on their answers to the above questions, you need to decide their fortunes from these following 8 fortunes:
 1. Nomad - Free-Spirited, Independent, Wanderlust, Flexible, Adventurous.
 Traits: Explorer, Drifter, Trailblazer, Survivor, Adaptable.
 
@@ -43,7 +43,7 @@ Traits: Renegade, Anarchist, Maverick, Reformer, Revolutionary.
 8. Mystic - Mysterious, Spiritual, Contemplative, Introspective, Peaceful.
 Traits: Sage, Seer, Healer, Philosopher, Mediator.
 
-You should only respond with the number of their fortunes, so for example, 1 or 2. That’s it, DO NOT response with anything else."""},
+You should only respond with the number of their fortunes, so for example, either 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8. That’s it, DO NOT response with anything else."""},
 ]
 
 # Session state
@@ -78,13 +78,6 @@ stream = p.open(
    frames_per_buffer=FRAMES_PER_BUFFER
 )
 
-def open_page(url):
-    open_script= """
-        <script type="text/javascript">
-            window.open('%s', '_blank').focus();
-        </script>
-    """ % (url)
-    html(open_script)
 
 # Start/stop audio transmission
 def start_listening():
@@ -105,9 +98,9 @@ def process_transcript(transcript):
 	st.session_state['text'] = f"Processing transcript: {transcript}"
 	st.session_state['responses'].append(f"{st.session_state['current_question']}:"+ transcript)
 	#st.write(st.session_state['text'])
-	if st.session_state['current_question'] < 8:
+	if st.session_state['current_question'] < 1:
 		st.session_state['current_question'] += 1
-		image_display.image(f'/questions/{st.session_state["current_question"]}.png')
+		image_display.image(f'questions/{st.session_state["current_question"]}.png')
 	else:
 		st.session_state['run'] = False
 		print(st.session_state['responses'])
@@ -121,9 +114,11 @@ def process_transcript(transcript):
         )
 		ai_response = response.choices[0].message.content
 
-		image_display.image(f'/results/fortune-{ai_response}.png')
-		transcription_display.button('Get fortune by email', on_click=open_page('https://forms.gle/RvTLdKiU5GJkah7U8'))
+		transcription_display.empty()
 
+		image_display.image(f'results/{ai_response}.png')
+		webbrowser.open_new_tab(f'https://docs.google.com/forms/d/e/1FAIpQLSeTOg8m-Wd4rnG5WKVPnQ6dbuEM8oCDSbAvbNVsD0KWWv7z0A/viewform?usp=pp_url&entry.1826277827={ai_response}')
+		
 	
     # Add any additional processing here, for example, sending the transcript to an LLM
 
@@ -146,8 +141,6 @@ col2.button('Stop', on_click=stop_listening)
 with st.expander('About this App'):
 	st.markdown('''
 	This Streamlit app uses the AssemblyAI API to perform real-time transcription.
-	
-	Libraries used:
 	''')
 
 async def terminate_session(_ws):
@@ -225,14 +218,14 @@ async def send_receive():
 					if json.loads(result_str)['message_type']=='FinalTranscript':
 						print(result)
 						st.session_state['text'] = result
-						transcription_display.text(f"Real-time Transcript: {result}")
+						transcription_display.markdown(f'<p style="font-size: 20px;">Real-time Transcript: {result}</p>', unsafe_allow_html=True)
 						#st.write(st.session_state['text'])
 
 						process_transcript(st.session_state['text'])
 					else:
 						print(result)
 						st.session_state['text'] = result
-						transcription_display.text(f"Real-time Transcript: {result}")
+						transcription_display.markdown(f'<p style="font-size: 20px;">Real-time Transcript: {result}</p>', unsafe_allow_html=True)
 						#st.write(st.session_state['text'])
 						
 
