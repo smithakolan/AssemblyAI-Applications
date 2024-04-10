@@ -6,6 +6,7 @@ import json
 import pyaudio
 from openai import OpenAI
 import webbrowser
+import random
 
 
 # Prompt
@@ -19,14 +20,9 @@ full_transcript = [
 7. On the way back to the train, you come to a crossroads of two paths, one going left and one going right. Which one do you take instinctively?
   ------------------------------------------------------------------
 Based on their answers to the above questions, you need to decide their fortunes from these following 8 fortunes:
-1. Nomad - Free-Spirited, Independent, Wanderlust, Flexible, Adventurous.
-Traits: Explorer, Drifter, Trailblazer, Survivor, Adaptable.
-
-2. Hermit - Solitary, Reflective, Thoughtful, Self-Sufficient, Introspective.
-Traits: Sage, Loner, Philosopher, Contemplative, Independent.
-
-3. Sovereign - Decisive, Commanding, Structured, Ambitious, Resolute.
-Traits: Leader, Pioneer, Strategist, Regal, Authoritative.
+1. Nomad - Free-Spirited, Independent, Wanderlust, Flexible, Adventurous. Traits: Explorer, Drifter, Trailblazer, Survivor, Adaptable.
+2. Hermit - Solitary, Reflective, Thoughtful, Self-Sufficient, Introspective. Traits: Sage, Loner, Philosopher, Contemplative, Independent.
+3. Sovereign - Decisive, Commanding, Structured, Ambitious, Resolute. Traits: Leader, Pioneer, Strategist, Regal, Authoritative.
 
 4. Dynamo - Energetic, Forceful, Competitive, Dynamic, Driven.
 Traits: Mover, Shaker, Achiever, Motivator, Warrior.
@@ -98,21 +94,23 @@ def process_transcript(transcript):
 	st.session_state['text'] = f"Processing transcript: {transcript}"
 	st.session_state['responses'].append(f"{st.session_state['current_question']}:"+ transcript)
 	#st.write(st.session_state['text'])
-	if st.session_state['current_question'] < 1:
+	if st.session_state['current_question'] < 7:
 		st.session_state['current_question'] += 1
 		image_display.image(f'questions/{st.session_state["current_question"]}.png')
 	else:
 		st.session_state['run'] = False
-		print(st.session_state['responses'])
-		openai_client = OpenAI(api_key = st.secrets['openai_api_key'])
+		#print(st.session_state['responses'])
+		# openai_client = OpenAI(api_key = st.secrets['openai_api_key'])
 
-		full_transcript.append({"role":"user", "content": ''.join(st.session_state['responses'])})
+		# full_transcript.append({"role":"user", "content": ''.join(st.session_state['responses'])})
 
-		response = openai_client.chat.completions.create(
-            model = "gpt-3.5-turbo",
-            messages = full_transcript
-        )
-		ai_response = response.choices[0].message.content
+		# response = openai_client.chat.completions.create(
+        #     model = "gpt-3.5-turbo",
+        #     messages = full_transcript
+        # )
+		# ai_response = response.choices[0].message.content
+
+		ai_response = random.randint(1, 8)
 
 		transcription_display.empty()
 
@@ -216,14 +214,14 @@ async def send_receive():
 					result = json.loads(result_str)['text']
 
 					if json.loads(result_str)['message_type']=='FinalTranscript':
-						print(result)
+						#print(result)
 						st.session_state['text'] = result
 						transcription_display.markdown(f'<p style="font-size: 20px;">Real-time Transcript: {result}</p>', unsafe_allow_html=True)
 						#st.write(st.session_state['text'])
 
 						process_transcript(st.session_state['text'])
 					else:
-						print(result)
+						#print(result)
 						st.session_state['text'] = result
 						transcription_display.markdown(f'<p style="font-size: 20px;">Real-time Transcript: {result}</p>', unsafe_allow_html=True)
 						#st.write(st.session_state['text'])
