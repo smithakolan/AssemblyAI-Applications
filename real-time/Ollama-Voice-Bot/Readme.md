@@ -1,5 +1,5 @@
 
-# Real-Time Speech Transcription and Response System Setup
+# Build an AI Voice Bot with Ollama and AssemblyAI
 
 This guide will help you set up a real-time speech transcription and response system using AssemblyAI for transcription, LLAMA 3 for generating responses, and ElevenLabs for streaming the response as live audio.
 
