@@ -63,7 +63,7 @@ class AI_Assistant:
             self.transcriber = None
 
     def on_open(self, session_opened: aai.RealtimeSessionOpened):
-        #print("Session ID:", session_opened.session_id)
+        print("Session ID:", session_opened.session_id)
         return
 
 
@@ -78,7 +78,7 @@ class AI_Assistant:
 
 
     def on_error(self, error: aai.RealtimeError):
-        #print("An error occured:", error)
+        print("An error occured:", error)
         return
 
 
