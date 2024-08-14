@@ -8,5 +8,6 @@ Most code examples are written in Python or Javascript, but the concepts contain
 # Real-time 🕒
 
 ## Create an AI Voice Bot in Python:
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/Nyo5m_glZXs/0.jpg)](https://www.youtube.com/watch?v=Nyo5m_glZXs)(https://youtu.be/Nyo5m_glZXs?si=F9mY5ILqC9ZJeqPV)
 This video shows you how to build an AI voice bot that understand real-time speech and also responds in real-time. Check out the [code here](https://github.com/smithakolan/AssemblyAI-Applications/tree/main/AI-Voice-Bot-Python-Dental-Assistant).
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/Nyo5m_glZXs/0.jpg)](https://www.youtube.com/watch?v=Nyo5m_glZXs)
+This video shows you how to build an AI voice bot that understand real-time speech and also responds in real-time.
