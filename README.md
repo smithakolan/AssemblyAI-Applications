@@ -1,5 +1,5 @@
 # AssemblyAI Applications
-Here is a collection of cool applications that I've built with AssemblyAI
+Here is a collection of cool applications that I've built with AssemblyAI, this list contains links to github repos of each project and their respective YouTube videos!
 
 🔑 You will need an [AssemblyAI](https://www.assemblyai.com/?utm_source=github&utm_medium=referral&utm_campaign=smitha) account and API key to use these code examples. Click [here](https://www.assemblyai.com/?utm_source=github&utm_medium=referral&utm_campaign=smitha) to create an account and get $50 in free credits. 🔑
 
