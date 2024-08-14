@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Transcription Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        #transcript-text {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="https://www.assemblyai.com" class="home-button">
+            <img href="https://www.assemblyai.com" src="{{ url_for('static', filename='AAI_Logo_Primary.png') }}" alt="AssemblyAI Logo" class="logo">
+        </a>
+        <h1>Medical Transcription Analysis</h1>
+    </div>
+    <div class="container">
+        <div class="controls">
+            <button id="toggle-btn" class="mic-off">🎤 Start Recording</button>
+        </div>
+        <div class="transcript-container">
+            <div class="transcript">
+                <h2>Real-Time Transcript</h2>
+                <pre id="transcript-text"></pre>
+            </div>
+            <div class="legend">
+                <h3>Highlight on transcript</h3>
+                <p><span class="anatomy">Anatomy</span></p>
+                <p><span class="medical-history">Medical History</span></p>
+                <p><span class="medication">Medication</span></p>
+                <p><span class="phi">Protected Health Information</span></p>
+                <p><span class="tests">Tests & Treatments</span></p>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+        const toggleBtn = document.getElementById('toggle-btn');
+        const transcriptText = document.getElementById('transcript-text');
+
+        let isRecording = false;
+        let analyzedText = '';
+
+        toggleBtn.addEventListener('click', () => {
+            isRecording = !isRecording;
+            if (isRecording) {
+                toggleBtn.textContent = "🛑 Stop Recording";
+                toggleBtn.classList.remove('mic-off');
+                toggleBtn.classList.add('mic-on');
+            } else {
+                toggleBtn.textContent = "🎤 Start Recording";
+                toggleBtn.classList.remove('mic-on');
+                toggleBtn.classList.add('mic-off');
+            }
+            socket.emit('toggle_transcription');
+        });
+
+        // Display the partial transcript in real-time
+        socket.on('partial_transcript', data => {
+            // Appends the latest partial transcript
+            transcriptText.innerHTML = analyzedText + data.text;
+        });
+
+        // Displays the analyzed text
+        socket.on('formatted_transcript', data => {
+            analyzedText += data.text + "<br>";
+            transcriptText.innerHTML = analyzedText;
+        });
+    </script>
+</body>
+</html>
