@@ -7,4 +7,5 @@ Most code examples are written in Python or Javascript, but the concepts contain
 
 # Real-time 🕒
 
-Create an AI Voice Bot in Python
+[Create an AI Voice Bot in Python](https://youtu.be/Nyo5m_glZXs?si=F9mY5ILqC9ZJeqPV)
+https://youtu.be/Nyo5m_glZXs?si=F9mY5ILqC9ZJeqPV
